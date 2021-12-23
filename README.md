@@ -1,6 +1,6 @@
 # go-pushdeer-sdk
 
-pushdeer的golanga版本的sdk
+[pushdeer](https://github.com/easychen/pushdeer) 的golanga版本的sdk
 
 ![GitHub forks](https://img.shields.io/github/forks/Luoxin/go-pushdeer-sdk?style=social)
 ![GitHub Repo stars](https://img.shields.io/github/stars/Luoxin/go-pushdeer-sdk?style=social)
