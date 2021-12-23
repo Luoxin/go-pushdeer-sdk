@@ -10,6 +10,7 @@ pushdeer的golanga版本的sdk
 ## 使用方式
 
 在模块中安装
+
 `go get github.com/Luoxin/go-pushdeer-sdk`
 
 ### 注册设备
