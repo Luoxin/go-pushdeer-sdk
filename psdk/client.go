@@ -1,6 +1,7 @@
 package psdk
 
 import (
+	"encoding/json"
 	"github.com/Luoxin/go-pushdeer-sdk/perror"
 	"github.com/go-resty/resty/v2"
 	log "github.com/sirupsen/logrus"
@@ -59,7 +60,9 @@ func (p *PushdeerClient) LoginFaker() (*LoginFakeRsp, error) {
 		return nil, err
 	}
 
-	err = p.checkResp(resp, rsp.Code)
+	err = p.checkResp(resp, &BaseRsp{
+		Code: rsp.Code,
+	})
 	if err != nil {
 		log.Errorf("err:%v", err)
 		return nil, err
@@ -69,16 +72,10 @@ func (p *PushdeerClient) LoginFaker() (*LoginFakeRsp, error) {
 }
 
 func (p *PushdeerClient) UserInfo(req *UserInfoReq) (*UserInfoRsp, error) {
-	req.token = p.token
+	req.Token = p.token
 
 	var rsp UserInfoRsp
-	resp, err := p.httpClient.R().SetResult(&rsp).Post(UserInfo)
-	if err != nil {
-		log.Errorf("err:%v", err)
-		return nil, err
-	}
-
-	err = p.checkResp(resp, rsp.Code)
+	err := p.Post(UserInfo, *req, &rsp)
 	if err != nil {
 		log.Errorf("err:%v", err)
 		return nil, err
@@ -88,7 +85,7 @@ func (p *PushdeerClient) UserInfo(req *UserInfoReq) (*UserInfoRsp, error) {
 }
 
 func (p *PushdeerClient) DeviceReg(req *DeviceRegReq) (*DeviceRegRsp, error) {
-	req.token = p.token
+	req.Token = p.token
 
 	var rsp DeviceRegRsp
 	resp, err := p.httpClient.R().SetResult(&rsp).Post(DeviceReg)
@@ -97,7 +94,7 @@ func (p *PushdeerClient) DeviceReg(req *DeviceRegReq) (*DeviceRegRsp, error) {
 		return nil, err
 	}
 
-	err = p.checkResp(resp, rsp.Code)
+	err = p.checkResp(resp, rsp)
 	if err != nil {
 		log.Errorf("err:%v", err)
 		return nil, err
@@ -107,7 +104,7 @@ func (p *PushdeerClient) DeviceReg(req *DeviceRegReq) (*DeviceRegRsp, error) {
 }
 
 func (p *PushdeerClient) DeviceList(req *DeviceListReq) (*DeviceListRsp, error) {
-	req.token = p.token
+	req.Token = p.token
 
 	var rsp DeviceListRsp
 	resp, err := p.httpClient.R().SetResult(&rsp).Post(DeviceList)
@@ -116,7 +113,7 @@ func (p *PushdeerClient) DeviceList(req *DeviceListReq) (*DeviceListRsp, error) 
 		return nil, err
 	}
 
-	err = p.checkResp(resp, rsp.Code)
+	err = p.checkResp(resp, rsp)
 	if err != nil {
 		log.Errorf("err:%v", err)
 		return nil, err
@@ -126,7 +123,7 @@ func (p *PushdeerClient) DeviceList(req *DeviceListReq) (*DeviceListRsp, error) 
 }
 
 func (p *PushdeerClient) DeviceRemove(req *DeviceRemoveReq) (*DeviceRemoveRsp, error) {
-	req.token = p.token
+	req.Token = p.token
 
 	var rsp DeviceRemoveRsp
 	resp, err := p.httpClient.R().SetResult(&rsp).Post(DeviceRemove)
@@ -135,7 +132,7 @@ func (p *PushdeerClient) DeviceRemove(req *DeviceRemoveReq) (*DeviceRemoveRsp, e
 		return nil, err
 	}
 
-	err = p.checkResp(resp, rsp.Code)
+	err = p.checkResp(resp, rsp)
 	if err != nil {
 		log.Errorf("err:%v", err)
 		return nil, err
@@ -145,7 +142,7 @@ func (p *PushdeerClient) DeviceRemove(req *DeviceRemoveReq) (*DeviceRemoveRsp, e
 }
 
 func (p *PushdeerClient) KeyGen(req *KeyGenReq) (*KeyGenRsp, error) {
-	req.token = p.token
+	req.Token = p.token
 
 	var rsp KeyGenRsp
 	resp, err := p.httpClient.R().SetResult(&rsp).Post(KeyGen)
@@ -154,7 +151,7 @@ func (p *PushdeerClient) KeyGen(req *KeyGenReq) (*KeyGenRsp, error) {
 		return nil, err
 	}
 
-	err = p.checkResp(resp, rsp.Code)
+	err = p.checkResp(resp, rsp)
 	if err != nil {
 		log.Errorf("err:%v", err)
 		return nil, err
@@ -164,16 +161,16 @@ func (p *PushdeerClient) KeyGen(req *KeyGenReq) (*KeyGenRsp, error) {
 }
 
 func (p *PushdeerClient) KeyRegen(req *KeyRegenReq) (*KeyRegenRsp, error) {
-	req.token = p.token
+	req.Token = p.token
 
 	var rsp KeyRegenRsp
-	resp, err := p.httpClient.R().SetResult(&rsp).Post(KeyGen)
+	resp, err := p.httpClient.R().SetResult(&rsp).Post(KeyRegen)
 	if err != nil {
 		log.Errorf("err:%v", err)
 		return nil, err
 	}
 
-	err = p.checkResp(resp, rsp.Code)
+	err = p.checkResp(resp, rsp)
 	if err != nil {
 		log.Errorf("err:%v", err)
 		return nil, err
@@ -183,7 +180,7 @@ func (p *PushdeerClient) KeyRegen(req *KeyRegenReq) (*KeyRegenRsp, error) {
 }
 
 func (p *PushdeerClient) KeyList(req *KeyListReq) (*KeyListRsp, error) {
-	req.token = p.token
+	req.Token = p.token
 	var rsp KeyListRsp
 	resp, err := p.httpClient.R().Post(KeyList)
 	if err != nil {
@@ -191,7 +188,7 @@ func (p *PushdeerClient) KeyList(req *KeyListReq) (*KeyListRsp, error) {
 		return nil, err
 	}
 
-	err = p.checkResp(resp, rsp.Code)
+	err = p.checkResp(resp, rsp)
 	if err != nil {
 		log.Errorf("err:%v", err)
 		return nil, err
@@ -201,7 +198,7 @@ func (p *PushdeerClient) KeyList(req *KeyListReq) (*KeyListRsp, error) {
 }
 
 func (p *PushdeerClient) KeyRemove(req *KeyRemoveReq) (*KeyRemoveRsp, error) {
-	req.token = p.token
+	req.Token = p.token
 	var rsp KeyRemoveRsp
 	resp, err := p.httpClient.R().Post(KeyRemove)
 	if err != nil {
@@ -209,7 +206,7 @@ func (p *PushdeerClient) KeyRemove(req *KeyRemoveReq) (*KeyRemoveRsp, error) {
 		return nil, err
 	}
 
-	err = p.checkResp(resp, rsp.Code)
+	err = p.checkResp(resp, rsp)
 	if err != nil {
 		log.Errorf("err:%v", err)
 		return nil, err
@@ -219,7 +216,7 @@ func (p *PushdeerClient) KeyRemove(req *KeyRemoveReq) (*KeyRemoveRsp, error) {
 }
 
 func (p *PushdeerClient) MessagePush(req *MessagePushReq) (*MessagePushRsp, error) {
-	req.token = p.token
+	req.Token = p.token
 
 	var rsp MessagePushRsp
 	resp, err := p.httpClient.R().Post(MessagePush)
@@ -228,7 +225,7 @@ func (p *PushdeerClient) MessagePush(req *MessagePushReq) (*MessagePushRsp, erro
 		return nil, err
 	}
 
-	err = p.checkResp(resp, rsp.Code)
+	err = p.checkResp(resp, rsp)
 	if err != nil {
 		log.Errorf("err:%v", err)
 		return nil, err
@@ -238,7 +235,7 @@ func (p *PushdeerClient) MessagePush(req *MessagePushReq) (*MessagePushRsp, erro
 }
 
 func (p *PushdeerClient) MessageList(req *MessageListReq) (*MessageListRsp, error) {
-	req.token = p.token
+	req.Token = p.token
 	var rsp MessageListRsp
 	resp, err := p.httpClient.R().Post(MessageList)
 	if err != nil {
@@ -246,7 +243,7 @@ func (p *PushdeerClient) MessageList(req *MessageListReq) (*MessageListRsp, erro
 		return nil, err
 	}
 
-	err = p.checkResp(resp, rsp.Code)
+	err = p.checkResp(resp, rsp)
 	if err != nil {
 		log.Errorf("err:%v", err)
 		return nil, err
@@ -256,7 +253,7 @@ func (p *PushdeerClient) MessageList(req *MessageListReq) (*MessageListRsp, erro
 }
 
 func (p *PushdeerClient) MessageRemove(req *MessageRemoveReq) (*MessageRemoveRsp, error) {
-	req.token = p.token
+	req.Token = p.token
 	var rsp MessageRemoveRsp
 	resp, err := p.httpClient.R().Post(MessageRemove)
 	if err != nil {
@@ -264,7 +261,7 @@ func (p *PushdeerClient) MessageRemove(req *MessageRemoveReq) (*MessageRemoveRsp
 		return nil, err
 	}
 
-	err = p.checkResp(resp, rsp.Code)
+	err = p.checkResp(resp, rsp)
 	if err != nil {
 		log.Errorf("err:%v", err)
 		return nil, err
@@ -273,16 +270,45 @@ func (p *PushdeerClient) MessageRemove(req *MessageRemoveReq) (*MessageRemoveRsp
 	return &rsp, nil
 }
 
-func (p *PushdeerClient) checkResp(resp *resty.Response, code int) error {
+func (p *PushdeerClient) checkResp(resp *resty.Response, code Response) error {
 	switch resp.StatusCode() {
 	case http.StatusOK:
-		switch code {
+		switch code.GetCode() {
 		case 0:
 			return nil
 		default:
-			return perror.GenCodeErr(code)
+			return perror.CreateErr(code.GetCode(), code.GetContent())
 		}
 	default:
 		return perror.CreateErr(-resp.StatusCode(), resp.Status())
 	}
+}
+
+func (p *PushdeerClient) Post(path string, req interface{}, rsp Response) error {
+	buf, err := json.Marshal(req)
+	if err != nil {
+		log.Errorf("err:%v", err)
+		return err
+	}
+
+	var reqForm map[string]string
+	err = json.Unmarshal(buf, &reqForm)
+	if err != nil {
+		log.Errorf("err:%v", err)
+		return err
+	}
+
+	resp, err := p.httpClient.R().SetFormData(reqForm).SetResult(rsp).Post(path)
+	if err != nil {
+		log.Errorf("err:%v", err)
+		return err
+	}
+
+	err = p.checkResp(resp, rsp)
+	if err != nil {
+		log.Errorf("err:%v", err)
+		return err
+	}
+
+	return nil
 }

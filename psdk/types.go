@@ -3,11 +3,25 @@ package psdk
 import "time"
 
 type BaseReq struct {
-	token string `json:"token"`
+	Token string `json:"token"`
+}
+
+type Response interface {
+	GetCode() int
+	GetContent() string
 }
 
 type BaseRsp struct {
-	Code int `json:"code"`
+	Code    int    `json:"code"`
+	Content string `json:"content"`
+}
+
+func (p BaseRsp) GetCode() int {
+	return p.Code
+}
+
+func (p BaseRsp) GetContent() string {
+	return p.Content
 }
 
 type MsgType string
