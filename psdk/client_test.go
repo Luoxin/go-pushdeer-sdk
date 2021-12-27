@@ -37,7 +37,7 @@ func TestNewFaker(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name:    "new-faker",
+			name:    "new_faker",
 			wantErr: false,
 		},
 	}
@@ -64,7 +64,7 @@ func TestUserInfo(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name:    "user-info",
+			name:    "user_info",
 			wantErr: false,
 		},
 	}
@@ -77,6 +77,42 @@ func TestUserInfo(t *testing.T) {
 			}
 
 			got, err := client.UserInfo(&UserInfoReq{})
+			if (err != nil) != tt.wantErr {
+				t.Errorf("NewFaker() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+
+			log.Infof("%+v", got)
+		})
+	}
+}
+
+func TestDeviceReg(t *testing.T) {
+	type args struct {
+		apiBase string
+	}
+	tests := []struct {
+		name    string
+		wantErr bool
+	}{
+		{
+			name:    "device_reg",
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			client, err := getClient()
+			if err != nil {
+				t.Errorf("err:%v", err)
+				return
+			}
+
+			got, err := client.DeviceReg(&DeviceRegReq{
+				Name:     "",
+				DeviceId: "",
+				IsClip:   0,
+			})
 			if (err != nil) != tt.wantErr {
 				t.Errorf("NewFaker() error = %v, wantErr %v", err, tt.wantErr)
 				return
