@@ -8,20 +8,20 @@ type BaseReq struct {
 
 type Response interface {
 	GetCode() int
-	GetContent() string
+	GetErrorMsg() string
 }
 
 type BaseRsp struct {
-	Code    int    `json:"code"`
-	Content string `json:"content"`
+	Code  int    `json:"code"`
+	Error string `json:"error"`
 }
 
 func (p BaseRsp) GetCode() int {
 	return p.Code
 }
 
-func (p BaseRsp) GetContent() string {
-	return p.Content
+func (p BaseRsp) GetErrorMsg() string {
+	return p.Error
 }
 
 type MsgType string
@@ -46,10 +46,16 @@ type UserInfoReq struct {
 
 type UserInfoRsp struct {
 	BaseRsp
-	Uid   int    `json:"uid"`
-	Name  string `json:"name"`
-	Email string `json:"email"`
-	Level int    `json:"level"`
+	Content []struct {
+		Id        int         `json:"id"`
+		Name      string      `json:"name"`
+		Email     string      `json:"email"`
+		AppleId   string      `json:"apple_id"`
+		WechatId  interface{} `json:"wechat_id"`
+		Level     int         `json:"level"`
+		CreatedAt time.Time   `json:"created_at"`
+		UpdatedAt time.Time   `json:"updated_at"`
+	} `json:"content"`
 }
 
 type DeviceRegReq struct {

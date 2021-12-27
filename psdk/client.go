@@ -277,7 +277,7 @@ func (p *PushdeerClient) checkResp(resp *resty.Response, code Response) error {
 		case 0:
 			return nil
 		default:
-			return perror.CreateErr(code.GetCode(), code.GetContent())
+			return perror.CreateErr(code.GetCode(), code.GetErrorMsg())
 		}
 	default:
 		return perror.CreateErr(-resp.StatusCode(), resp.Status())
