@@ -6,6 +6,7 @@ import (
 	"github.com/go-resty/resty/v2"
 	log "github.com/sirupsen/logrus"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -16,6 +17,12 @@ type PushdeerClient struct {
 }
 
 func getBaseClient(apiBase string) *PushdeerClient {
+	if strings.HasPrefix(apiBase, "http://") || strings.HasPrefix(apiBase, "https://") {
+
+	} else {
+		apiBase = "http://" + apiBase
+	}
+
 	return &PushdeerClient{
 		apiBase: apiBase,
 		httpClient: resty.New().
