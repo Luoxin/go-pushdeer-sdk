@@ -185,7 +185,7 @@ type MessageListRsp struct {
 	BaseRsp
 	Content struct {
 		Messages []struct {
-			Id        int       `json:"id"`
+			Id        int64     `json:"id"`
 			Uid       string    `json:"uid"`
 			Text      string    `json:"text"`
 			Desp      string    `json:"desp"`
